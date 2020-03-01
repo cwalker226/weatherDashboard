@@ -3,28 +3,30 @@ var searchList = $("#searchList");
 var apiKey = "d5294f3378f302d77473d3cd236f4d46";
 var now = moment().format("L");
 var weatherIconURL = "http://openweathermap.org/img/w/";
-var searchHist;
+var searchHist = [];
 
-searchHist = JSON.parse(localStorage.getItem("citySearched"));
-if(searchHist !== null){
+
+if(localStorage.getItem("citySearched")){
+    searchHist = JSON.parse(localStorage.getItem("citySearched"));
     for (city of searchHist){
         createHistory(city);
     }
-}else{
-    searchHist = [];
 }
 
 
-searchBtn.on("click", function(){
+searchBtn.on("click", function(event){
+    event.preventDefault();
     var city = $("#search_txt").val();
-    
-    createHistory(city);
 
-    searchHist.push(city);
+    if(searchHist.indexOf(city) < 0){
+        searchHist.push(city);
+        createHistory(city);
+    }
 
     localStorage.setItem("citySearched", JSON.stringify(searchHist));
 
     searchForCity(city);
+    $("#search_txt").val("");
 });
 
 searchList.on("click", function(event){
@@ -36,7 +38,7 @@ searchList.on("click", function(event){
 function createHistory(cityName){
     var listEl = $("<li>");
 
-    listEl.addClass("list-group-item");
+    listEl.addClass("list-group-item list-group-item-action");
     listEl.text(cityName);
     searchList.append(listEl);
 }
@@ -68,7 +70,20 @@ function getUVIndex(lat, lon){
         url: "http://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon + "&units=imperial",
         method: "GET"
     }).then(function(response){
-        $("#uv_index").text(response.value);
+        var uvIndex = response.value;
+        var uvEL = $("#uv_index");
+        var scaleColor = "badge swatch-purple";
+        if(uvIndex < "3"){
+            scaleColor ="badge swatch-green";
+        }else if(uvIndex >= 3 && uvIndex < 6){
+            scaleColor = "badge swatch-yellow";
+        }else if(uvIndex >= 6 && uvIndex < 8){
+            scaleColor = "badge swatch-orange";
+        }else if(uvIndex >= 8 && uvIndex < 11){
+            scaleColor = "badge swatch-red";
+        }
+        uvEL.addClass(scaleColor);
+        uvEL.text(response.value);
     });
 }
 
@@ -77,6 +92,30 @@ function getFiveDayForecast(city){
         url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=" + apiKey + "&units=imperial",
         method: "GET"
     }).then(function(response){
-        var forecastList = response.list;
+        var forecastList = $("#forecast");
+        var forecastArray = response.list;
+
+        forecastList.empty();
+
+        for(var i = 0; i < forecastArray.length; i++){
+            if(moment(forecastArray[i].dt_txt).hour() === 15){
+                var listItem = $("<div>");
+                var dateEl = $("<h5>");
+                var iconEl = $("<img>");
+                var tempEl = $("<p>");
+                var humidityEl = $("<p>");
+
+                listItem.addClass("list-group-item active mr-4 p-2 text-nowrap");
+                dateEl.text(moment(forecastArray[i].dt_txt).format("MM/DD/YYYY"));
+                listItem.append(dateEl);
+                iconEl.attr("src", weatherIconURL + forecastArray[i].weather[0].icon + ".png");
+                listItem.append(iconEl);
+                tempEl.text("Temp: " + forecastArray[i].main.temp + "°F");
+                listItem.append(tempEl);
+                humidityEl.text("Humidity: " + forecastArray[i].main.humidity + "%");
+                listItem.append(humidityEl);
+                forecastList.append(listItem);
+            }
+        }
     });
 }

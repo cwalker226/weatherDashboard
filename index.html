@@ -19,50 +19,35 @@
     </header>
     <div class="container mr-0 ml-0">
         <div class="row">
-            <div class="col-4 bg-light">
+            <div class="col-4 bg-light m-2">
                 <h4>Search for a City:</h4>
-                <div class="input-group mb-3">
-                    <input id="search_txt" type="text" class="form-control">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="button" id="search"><i class="fas fa-search"></i></button>
+                <form>
+                    <div class="input-group mb-3">
+                        <input id="search_txt" type="text" class="form-control">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" id="search"><i class="fas fa-search"></i></button>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <div class="card">
                     <ul id="searchList" class="list-group list-group-flush"></ul>
                 </div>
             </div>
             <div class="col-7">
                 <div class="row">
-                    <div class="col">
+                    <div class="col border m-3 p-3">
                         <h3 id="city"><img id="icon" alt="Current Weather icon"></h3>
                         <p>Temperature: <span id="temp"></span></p>
                         <p>Humidity: <span id="humidity"></span></p>
                         <p>Wind Speed: <span id="wind"></span></p>
-                        <p>UV Index: <span id="uv_index" class="badge badge-danger"></span></p>
+                        <p>UV Index: <span id="uv_index"></span></p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <h4>5-Day Forecast:</h4>
-                        <div class="list-group list-group-horizontal">
-                            <div class="list-group-item active">
-                                <h5>8/16/2019</h5>
-                                <i></i>
-                                <p>Temp: <span></span></p>
-                                <p>Humidity: <span></span></p>
-                            </div>
-                            <div class="list-group-item">
-                                
-                            </div>
-                            <div class="list-group-item">
-                                
-                            </div>
-                            <div class="list-group-item">
-                                
-                            </div>
-                            <div class="list-group-item">
-                                
-                            </div>
+                        <div id="forecast" class="list-group list-group-horizontal-md">
+                            
                         </div>
                     </div>
                 </div>
