@@ -2,7 +2,7 @@ var searchBtn = $("#search");
 var searchList = $("#searchList");
 var apiKey = "d5294f3378f302d77473d3cd236f4d46";
 var now = moment().format("L");
-var weatherIconURL = "http://openweathermap.org/img/w/";
+var weatherIconURL = "https://openweathermap.org/img/w/";
 var searchHist = [];
 
 
@@ -45,7 +45,7 @@ function createHistory(cityName){
 
 function searchForCity(city){
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey + "&units=imperial",
+        url: "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=" + apiKey + "&units=imperial",
         method: "GET"
     }).then(function(response){
         var mainObj = response.main;
@@ -67,7 +67,7 @@ function searchForCity(city){
 
 function getUVIndex(lat, lon){
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon + "&units=imperial",
+        url: "https://api.openweathermap.org/data/2.5/uvi?appid=" + apiKey + "&lat=" + lat + "&lon=" + lon + "&units=imperial",
         method: "GET"
     }).then(function(response){
         var uvIndex = response.value;
@@ -89,7 +89,7 @@ function getUVIndex(lat, lon){
 
 function getFiveDayForecast(city){
     $.ajax({
-        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=" + apiKey + "&units=imperial",
+        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&APPID=" + apiKey + "&units=imperial",
         method: "GET"
     }).then(function(response){
         var forecastList = $("#forecast");
